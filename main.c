@@ -8,6 +8,9 @@ int main(int argc, char *argv[]) {
 
 	int option = 0;
 
+	//Pointer to the list
+	Node *list = NULL;
+
 	//open the file for reading and writing
 	infile = fopen("musicPlayList.csv", "r+");
 	if (infile != NULL) {
@@ -22,8 +25,10 @@ int main(int argc, char *argv[]) {
 			system("cls");
 
 			printf("Digital Music Manager\n");
-			printf("MENU\n1. Load\n2. Store\n3. Display\n");
+			printf("MENU\n(1.) Load\n(2.) Store\n(3.) Display\n(4.) Insert\n(5.) Delete\n(6.) Edit\n(7.) Sort\n(8.) Rate\n(9.) Play\n(10.) Shuffle\n(11.) Exit\n");
+			printf("Note: Only current functionality of: (1) load, (2) store, (3) display, (6) edit, (8) rate, (9) play, and (11) exit\n");
 			scanf("%d", &option);
+
 
 			//(  1  ) Load
 			if (option == 1) {
@@ -44,14 +49,14 @@ int main(int argc, char *argv[]) {
 					//processLine will accept a line as a parameter and return a Record struct
 					tempRecord = processLine(copyLine);
 
-					//create a node with the information gathered from the line
-
+					//insert the song record into the list
+					insertSong(&list, tempRecord);
 				}
 
-				
-				
+				//print the list of songs
+				printList(list);
 
-
+				system("pause");
 			}//(  2  ) Store
 			else if (option == 2) {
 				

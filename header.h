@@ -21,10 +21,10 @@ typedef struct record {
 	Number times played – an integer
 	Rating – an integer(1 – 5)*/
 
-	char* artist;
-	char* albumTitle;
-	char* songTitle;
-	char* genre;
+	char artist[50];
+	char albumTitle[50];
+	char songTitle[50];
+	char genre[10];
 	Duration songLength;
 	int numberOfPlays;
 	int rating;
@@ -40,5 +40,9 @@ typedef struct node{
 
 } Node;
 
+
+Node *makeNode(Record passedRecord);
 Record processLine(char line[]);
 Duration processDuration(char* stringDuration);
+void insertSong(Node **list, Record songRecord);
+void printList(Node *list);

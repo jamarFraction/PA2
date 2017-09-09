@@ -1,20 +1,34 @@
 #include "header.h"
 
-Node *makeNode() {
+Node *makeNode(Record passedRecord) {
 
 	//making a doubly linked node
-	Node *container;
+	Node *newNode;
 
 	//allocate memory for the Node
-	container = (Node *)malloc(sizeof(Node));
+	newNode = (Node *)malloc(sizeof(Node));
 
-	//initialize the next and previous pointers before returning
-	container->next = NULL;
-	container->previous = NULL;
+	//check if node created successfully
+	if (newNode != NULL) {
 
-	//initailize the Record struct? may be back..
+		//set the data fields
+		strcpy(newNode->data.artist, passedRecord.artist);
+		strcpy(newNode->data.albumTitle, passedRecord.albumTitle);
+		strcpy(newNode->data.songTitle, passedRecord.songTitle);
+		strcpy(newNode->data.genre, passedRecord.genre);
+		newNode->data.songLength = passedRecord.songLength;
+		newNode->data.numberOfPlays = passedRecord.numberOfPlays;
+		newNode->data.rating = passedRecord.rating;
 
-	return container;
+
+		//initialize the next and previous pointers before returning
+		newNode->next = NULL;
+		newNode->previous = NULL;
+
+	}
+
+
+	return newNode;
 }
 
 Record processLine(char line[]) {
@@ -54,13 +68,16 @@ Record processLine(char line[]) {
 		currentValue = strtok(lineCopy, ",");
 
 		//set the artist name
-		tempRecord.artist = currentValue;
+
+		strcpy(tempRecord.artist, currentValue);
+		//tempRecord.artist = currentValue;
 
 	}
 	else {
 		//Artist goes by a first and last name
 		//set the artist name
-		tempRecord.artist = currentValue;
+		strcpy(tempRecord.artist, currentValue);
+		//tempRecord.artist = currentValue;
 	}
 
 
@@ -72,7 +89,8 @@ Record processLine(char line[]) {
 	currentValue = strtok(NULL, ",");
 
 	//set the value in the record
-	tempRecord.albumTitle = currentValue;
+	//tempRecord.albumTitle = currentValue;
+	strcpy(tempRecord.albumTitle, currentValue);
 
 
 
@@ -82,8 +100,8 @@ Record processLine(char line[]) {
 	currentValue = strtok(NULL, ",");
 
 	//set the value in the record
-	tempRecord.songTitle = currentValue;
-
+	//tempRecord.songTitle = currentValue;
+	strcpy(tempRecord.songTitle, currentValue);
 
 
 
@@ -92,8 +110,8 @@ Record processLine(char line[]) {
 	currentValue = strtok(NULL, ",");
 
 	//set the value in the record
-	tempRecord.genre = currentValue;
-
+	//tempRecord.genre = currentValue;
+	strcpy(tempRecord.genre, currentValue);
 
 
 
@@ -163,5 +181,60 @@ Duration processDuration(char* stringDuration) {
 
 	//return the Duration struct
 	return tempDuration;
+
+}
+
+void insertSong(Node **list, Record songRecord) {
+
+	//Node worker variable
+	Node *tempNode = NULL;
+
+	//Pointers to be used for insertion
+	Node *pExisting = NULL, *pNew = NULL;
+
+	//Create node for insertion
+	tempNode = makeNode(songRecord);
+
+
+	//Inserting into an empty list
+	if (*list == NULL) {
+
+		(*list) = tempNode;
+	}
+	//Inserting into non-empty list
+	else {
+
+		//Set my current pointer to the node in the list
+		pExisting = *list;
+
+		//Set my previous pointer to the node we just created
+		pNew = tempNode;
+
+		//Update the new pointer's 'next' to the existing node
+		pNew->next = pExisting;
+
+		//Update the existing item in the list's 'previous' pointer to the new node
+		pExisting->previous = pNew;
+
+		//Update the new pointer's "previous" to NULL (should be already set by default, but just being extra careful
+		pNew->previous = NULL;
+
+		//Set the list to point to the newest node in the list
+		*list = pNew;
+
+	}
+	
+}
+
+void printList(Node *list) {
+
+	printf("--> ");
+	while (list != NULL)
+	{
+		printf("%s --> ", list->data.songTitle);
+		list = list->next;
+	}
+	putchar('\n');
+
 
 }
