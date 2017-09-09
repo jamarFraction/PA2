@@ -238,3 +238,83 @@ void printList(Node *list) {
 
 
 }
+
+void store(Node *list, FILE *outfile) {
+
+	char* currentValue;
+	char artistFullName[50]; 
+	char* artistFirstName;
+	char* artistLastName;
+
+	while (list->next != NULL) {
+
+		list = list->next;
+
+	}
+
+	//list is now at the "front"
+	//loop backwards until you are back at the "end" of the list
+
+	do {
+		
+		//single moniker
+		if (strstr(list->data.artist, ",") == NULL) {
+
+			//print to file
+			fprintf(outfile, "%s,%s,%s,%s,%d:%d,%d,%d\n", list->data.artist, list->data.albumTitle, list->data.songTitle, list->data.genre,
+				list->data.songLength.minutes, list->data.songLength.seconds, list->data.numberOfPlays, list->data.rating);
+		}
+		else {
+			//first and last name
+
+			//make a copy of the artist's name but add a comma a the end
+			//this will make tokenization easier
+			strcpy(artistFullName, list->data.artist);
+			strcat(artistFullName, ",");
+
+			//use strtok to seperate the first and last names
+			artistLastName = strtok(artistFullName, ",");
+			artistFirstName = strtok(NULL, ",");
+
+			//print to file
+			fprintf(outfile, "\"%s,%s\",%s,%s,%s,%d:%d,%d,%d\n", artistLastName, artistFirstName, list->data.albumTitle, list->data.songTitle, list->data.genre,
+				list->data.songLength.minutes, list->data.songLength.seconds, list->data.numberOfPlays, list->data.rating);
+
+		}
+
+		//advance to the next in the list
+		list = list->previous;
+
+	} while (list->previous != NULL);
+
+
+	//print the first node
+	//********************************************************************
+	if (strstr(list->data.artist, ",") == NULL) {
+
+		//testing
+		//print to file
+		fprintf(outfile, "%s,%s,%s,%s,%d:%d,%d,%d", list->data.artist, list->data.albumTitle, list->data.songTitle, list->data.genre,
+			list->data.songLength.minutes, list->data.songLength.seconds, list->data.numberOfPlays, list->data.rating);
+	}
+	else {
+		//first and last name
+
+		//make a copy of the artist's name but add a comma a the end
+		//this will make tokenization easier
+		strcpy(artistFullName, list->data.artist);
+		strcat(artistFullName, ",");
+
+		//use strtok to seperate the first and last names
+		artistLastName = strtok(artistFullName, ",");
+		artistFirstName = strtok(NULL, ",");
+
+		//print to file
+		fprintf(outfile, "\"%s,%s\",%s,%s,%s,%d:%d,%d,%d", artistLastName, artistFirstName, list->data.albumTitle, list->data.songTitle, list->data.genre,
+			list->data.songLength.minutes, list->data.songLength.seconds, list->data.numberOfPlays, list->data.rating);
+
+	}
+	//********************************************************************
+
+
+}

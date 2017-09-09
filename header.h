@@ -46,3 +46,4 @@ Record processLine(char line[]);
 Duration processDuration(char* stringDuration);
 void insertSong(Node **list, Record songRecord);
 void printList(Node *list);
+void store(Node *list, FILE *outfile);
