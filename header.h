@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h> 
 
 typedef struct duration {
 
@@ -22,6 +23,7 @@ typedef struct record {
 
 	char* artist;
 	char* albumTitle;
+	char* songTitle;
 	char* genre;
 	Duration songLength;
 	int numberOfPlays;
@@ -37,3 +39,6 @@ typedef struct node{
 
 
 } Node;
+
+Record processLine(char line[]);
+Duration processDuration(char* stringDuration);
