@@ -1,28 +1,29 @@
 #include "header.h"
 
 int main(int argc, char *argv[]) {
-
+	
+	//dataFile, information that will be read into the program/written to the file
 	FILE *dataFile = NULL;
 
+	//line and line copy to be used to read in from the dataFile
 	char line[100] = "", copyLine[100] = "";
 
+	//Menu control variable
 	int option = 0;
 
 	//Pointer to the list
 	Node *list = NULL;
 
-	char str[50] = "";
-
-	char *ptr;
+	//artist name to be used in searching for records to edit/display
+	char artistName[50] = "";
 
 	//open the file for reading and writing
 	dataFile = fopen("musicPlayList.csv", "r");
+
 	if (dataFile != NULL) {
 
 
 		
-
-
 		//Start Digital Music Manager
 		do {
 			option = 0;
@@ -34,7 +35,7 @@ int main(int argc, char *argv[]) {
 			
 			scanf("%d", &option);
 
-			//option = (int)(strtod(str, &ptr));
+			
 
 			
 			if (option == 1) {
@@ -98,10 +99,8 @@ int main(int argc, char *argv[]) {
 
 				}
 				else if (option == 2) {
-					//variable that will be passed to the display function
-
-					char artistName[50] = "";
-
+					
+					//Display songs by a certain artist
 					printf("What artist name would you like to display songs for?: ");
 
 					//Scan for the name of the artist.. delimeter set to the \n char and not whitespace
@@ -114,7 +113,62 @@ int main(int argc, char *argv[]) {
 				}
 				
 				system("cls");
-				
+	
+			}
+			else if (option == 6) {
+				//(  6  ) Edit
+				system("cls");
+
+				printf("What is the name of the artist who's song you'd like to edit: ");
+
+				//Scan for the name of the artist.. delimeter set to the \n char and not whitespace
+				scanf(" %[^\n]s", &artistName);
+
+				system("cls");
+
+				//pass the list and artist name to search for to the edit function
+				editSongByArtist(&list, artistName);
+
+				system("pause");
+
+
+			}
+			else if (option == 8) {
+				//( 8 ) Rate
+
+				system("cls");
+
+				printf("What is the name of the artist who's song you'd like to edit: ");
+
+				//Scan for the name of the artist.. delimeter set to the \n char and not whitespace
+				scanf(" %[^\n]s", &artistName);
+
+				system("cls");
+
+				//pass the list and artist name to search for to the edit function
+				editRatingByArtist(&list, artistName);
+
+				system("pause");
+
+
+			}
+			else if (option == 9) {
+				//( 9 ) Play
+
+				system("cls");
+				playLibrary(list);
+				system("pause");
+			}
+			else if (option == 11) {
+
+				//The “exit” command saves the most recent list to the musicPlayList.csv file.
+				//This command will completely overwrite the previous contents in the file
+
+				dataFile = fopen("musicPlayList.csv", "w");
+
+				store(list, dataFile);
+
+				fclose(dataFile);
 			}
 			//end of application
 		} while (option != 11);

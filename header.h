@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h> 
+#include <windows.h>
 
 typedef struct duration {
 
@@ -49,3 +50,6 @@ void printList(Node *list);
 void store(Node *list, FILE *outfile);
 void displaySongs(Node *list);
 void displaySongsByArtist(Node *list, char* artistName);
+void editSongByArtist(Node **list, char* artistName);
+void editRatingByArtist(Node **list, char* artistName);
+void playLibrary(Node *list);
