@@ -1,3 +1,5 @@
+//PROGRAM NOT YET COMPLETE, BLOACK COMMENTS ARE NEEDED
+
 #include "header.h"
 
 int main(int argc, char *argv[]) {
