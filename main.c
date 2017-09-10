@@ -11,12 +11,16 @@ int main(int argc, char *argv[]) {
 	//Pointer to the list
 	Node *list = NULL;
 
+	char str[50] = "";
+
+	char *ptr;
+
 	//open the file for reading and writing
 	dataFile = fopen("musicPlayList.csv", "r");
 	if (dataFile != NULL) {
 
-		printf("Ready to go!\nPress enter..");
-		getchar();
+
+		
 
 
 		//Start Digital Music Manager
@@ -27,8 +31,10 @@ int main(int argc, char *argv[]) {
 			printf("Digital Music Manager\n");
 			printf("MENU\n(1.) Load\n(2.) Store\n(3.) Display\n(4.) Insert\n(5.) Delete\n(6.) Edit\n(7.) Sort\n(8.) Rate\n(9.) Play\n(10.) Shuffle\n(11.) Exit\n");
 			printf("Note: Only current functionality of: (1) load, (2) store, (3) display, (6) edit, (8) rate, (9) play, and (11) exit\n");
+			
 			scanf("%d", &option);
 
+			//option = (int)(strtod(str, &ptr));
 
 			
 			if (option == 1) {
@@ -56,8 +62,7 @@ int main(int argc, char *argv[]) {
 				//close the file
 				fclose(dataFile);
 
-				//print the list of songs
-				printList(list);
+				printf("\nSongs read in successfully\n");
 
 				system("pause");
 			}
@@ -74,7 +79,42 @@ int main(int argc, char *argv[]) {
 			}
 			else if (option == 3) {
 				//( 3 ) Display
+				
+				//Prompt for all songs or only songs by a particular artist
+				do {
+					system("cls");
+					printf("Would you like to display all songs or songs by a particular artist?\n");
+					printf("(1.) All Songs\n(2.) Songs by Artist (case-sensitive... for now)\n");
+					
+					scanf("%d", &option);
 
+				} while (option != 1 && option != 2);
+
+				if (option == 1) {
+					//display all songs
+					system("cls");
+					displaySongs(list);
+					system("pause");
+
+				}
+				else if (option == 2) {
+					//variable that will be passed to the display function
+
+					char artistName[50] = "";
+
+					printf("What artist name would you like to display songs for?: ");
+
+					//Scan for the name of the artist.. delimeter set to the \n char and not whitespace
+					scanf(" %[^\n]s", &artistName);
+
+					//pass the list and art name to the display function
+					system("cls");
+					displaySongsByArtist(list, artistName);
+					system("pause");
+				}
+				
+				system("cls");
+				
 			}
 			//end of application
 		} while (option != 11);

@@ -318,3 +318,50 @@ void store(Node *list, FILE *outfile) {
 
 
 }
+
+void displaySongs(Node *list) {
+	
+	printf("Songs List:\n\n");
+
+	//Loop through the linked list and print the details of each record
+	while (list->next != NULL) {
+		printf("Artist: %s\nSong Title: %s\nAlbum Title: %s\nDuration: %d:%d\nGenre: %s\nNumber of Plays: %d\nRating: %d\n\n",
+			list->data.artist, list->data.songTitle, list->data.albumTitle, list->data.songLength.minutes, list->data.songLength.seconds,
+			list->data.genre, list->data.numberOfPlays, list->data.rating);
+
+		//move to the next item in the list
+		list = list->next;
+	}
+
+}
+
+void displaySongsByArtist(Node *list, char* artistName) {
+
+	printf("Songs by %s: \n\n", artistName);
+
+	//Loop through the linked list and print the details of each record
+	while (list->next != NULL) {
+
+		//comparing the name name of the artist in the data set to the passed in string of the artist
+		if (strcmp(list->data.artist, artistName) == 0) {
+
+			printf("Artist: %s\nSong Title: %s\nAlbum Title: %s\nDuration: %d:%d\nGenre: %s\nNumber of Plays: %d\nRating: %d\n\n",
+				list->data.artist, list->data.songTitle, list->data.albumTitle, list->data.songLength.minutes, list->data.songLength.seconds,
+				list->data.genre, list->data.numberOfPlays, list->data.rating);
+		}
+		
+
+		//move to the next item in the list
+		list = list->next;
+	}
+
+	//The first song in the list check
+	//comparing the name name of the artist in the data set to the passed in string of the artist
+	if (strcmp(list->data.artist, artistName) == 0) {
+
+		printf("Artist: %s\nSong Title: %s\nAlbum Title: %s\nDuration: %d:%d\nGenre: %s\nNumber of Plays: %d\nRating: %d\n\n",
+			list->data.artist, list->data.songTitle, list->data.albumTitle, list->data.songLength.minutes, list->data.songLength.seconds,
+			list->data.genre, list->data.numberOfPlays, list->data.rating);
+	}
+
+}
