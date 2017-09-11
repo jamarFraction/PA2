@@ -1,4 +1,10 @@
-//PROGRAM NOT YET COMPLETE, BLOACK COMMENTS ARE NEEDED
+/*******************************************************************************************
+* Programmer: Jamar Fraction                                                               *
+* Class: CptS 122, Fall  2017; Lab Section 05											   *
+* Programming Assignment: PA2															   *
+* Date: September 11, 2017                                                                 *
+* Description:This program fulfills the requirements for the second programming assignment *
+********************************************************************************************/
 
 #include "header.h"
 
@@ -22,9 +28,8 @@ int main(int argc, char *argv[]) {
 	//open the file for reading and writing
 	dataFile = fopen("musicPlayList.csv", "r");
 
+
 	if (dataFile != NULL) {
-
-
 		
 		//Start Digital Music Manager
 		do {
@@ -76,6 +81,7 @@ int main(int argc, char *argv[]) {
 				//overwrite the previous contents in the file.
 				dataFile = fopen("musicPlayList.csv", "w");
 
+				//send the pointer to the list and the dataFile to the store function
 				store(list, dataFile);
 				
 				fclose(dataFile);
@@ -89,6 +95,7 @@ int main(int argc, char *argv[]) {
 					printf("Would you like to display all songs or songs by a particular artist?\n");
 					printf("(1.) All Songs\n(2.) Songs by Artist (case-sensitive... for now)\n");
 					
+					//assing a value to option
 					scanf("%d", &option);
 
 				} while (option != 1 && option != 2);
@@ -96,7 +103,10 @@ int main(int argc, char *argv[]) {
 				if (option == 1) {
 					//display all songs
 					system("cls");
+
+					//send the pointer to the list to the display function
 					displaySongs(list);
+
 					system("pause");
 
 				}
@@ -121,6 +131,7 @@ int main(int argc, char *argv[]) {
 				//(  6  ) Edit
 				system("cls");
 
+				//prompt for artist record to edit
 				printf("What is the name of the artist who's song you'd like to edit: ");
 
 				//Scan for the name of the artist.. delimeter set to the \n char and not whitespace
@@ -140,6 +151,7 @@ int main(int argc, char *argv[]) {
 
 				system("cls");
 
+				//prompt for artist record to edit
 				printf("What is the name of the artist who's song you'd like to edit: ");
 
 				//Scan for the name of the artist.. delimeter set to the \n char and not whitespace
@@ -158,6 +170,8 @@ int main(int argc, char *argv[]) {
 				//( 9 ) Play
 
 				system("cls");
+
+				//send the pointer to the list to the play function
 				playLibrary(list);
 				system("pause");
 			}
@@ -166,10 +180,13 @@ int main(int argc, char *argv[]) {
 				//The “exit” command saves the most recent list to the musicPlayList.csv file.
 				//This command will completely overwrite the previous contents in the file
 
+				//open the file for writing
 				dataFile = fopen("musicPlayList.csv", "w");
 
+				//send the pointer to the list and the datafile to the store function
 				store(list, dataFile);
 
+				//close the file
 				fclose(dataFile);
 			}
 			//end of application

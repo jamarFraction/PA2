@@ -1,3 +1,10 @@
+/*******************************************************************************************
+* Programmer: Jamar Fraction                                                               *
+* Class: CptS 122, Fall  2017; Lab Section 05											   *
+* Programming Assignment: PA2															   *
+* Date: September 11, 2017                                                                 *
+* Description:This program fulfills the requirements for the second programming assignment *
+********************************************************************************************/
 #include "header.h"
 
 Node *makeNode(Record passedRecord) {
@@ -27,7 +34,7 @@ Node *makeNode(Record passedRecord) {
 
 	}
 
-
+	//return the pointer to the newly created node
 	return newNode;
 }
 
@@ -38,7 +45,8 @@ Record processLine(char line[]) {
 	Record tempRecord;
 	char fullName[25];
 
-	char *ptr; //needed for strtod
+	//needed for strtod
+	char *ptr; 
 
 	//int needed for comparison for artist and line length
 	int lineLength = strlen(line);
@@ -162,8 +170,9 @@ Duration processDuration(char* stringDuration) {
 
 	char minutes[10];
 
+	//super roundabout way of making it so my original value for duration is not modified
+	//shout-out to C
 	strcpy(minutes, stringDuration);
-
 	stringDurationCOPY = minutes;
 
 	//add a ":" to the end of the string. This will make tokenizing easier
@@ -226,19 +235,6 @@ void insertSong(Node **list, Record songRecord) {
 	
 }
 
-void printList(Node *list) {
-
-	printf("--> ");
-	while (list != NULL)
-	{
-		printf("%s --> ", list->data.songTitle);
-		list = list->next;
-	}
-	putchar('\n');
-
-
-}
-
 void store(Node *list, FILE *outfile) {
 
 	char* currentValue;
@@ -246,22 +242,25 @@ void store(Node *list, FILE *outfile) {
 	char* artistFirstName;
 	char* artistLastName;
 
+
+	//Loop ---> through the list until you get to the "front"
 	while (list->next != NULL) {
 
 		list = list->next;
 
 	}
 
+
 	//list is now at the "front"
 	//loop backwards until you are back at the "end" of the list
+	//EX: <--- Looping this way
+	while(list != NULL) {
 
-	do {
-		
 		//single moniker
 		if (strstr(list->data.artist, ",") == NULL) {
 
 			//print to file
-			fprintf(outfile, "%s,%s,%s,%s,%d:%d,%d,%d\n", list->data.artist, list->data.albumTitle, list->data.songTitle, list->data.genre,
+			fprintf(outfile, "%s,%s,%s,%s,%d:%d,%d,%d", list->data.artist, list->data.albumTitle, list->data.songTitle, list->data.genre,
 				list->data.songLength.minutes, list->data.songLength.seconds, list->data.numberOfPlays, list->data.rating);
 		}
 		else {
@@ -277,45 +276,22 @@ void store(Node *list, FILE *outfile) {
 			artistFirstName = strtok(NULL, ",");
 
 			//print to file
-			fprintf(outfile, "\"%s,%s\",%s,%s,%s,%d:%d,%d,%d\n", artistLastName, artistFirstName, list->data.albumTitle, list->data.songTitle, list->data.genre,
+			fprintf(outfile, "\"%s,%s\",%s,%s,%s,%d:%d,%d,%d", artistLastName, artistFirstName, list->data.albumTitle, list->data.songTitle, list->data.genre,
 				list->data.songLength.minutes, list->data.songLength.seconds, list->data.numberOfPlays, list->data.rating);
 
 		}
 
+		//Prevents there being a newline character at the end of the file
+		if (list->previous != NULL) {
+
+			fprintf(outfile, "\n");
+
+		}
+		
 		//advance to the next in the list
 		list = list->previous;
 
-	} while (list->previous != NULL);
-
-
-	//print the first node
-	//********************************************************************
-	if (strstr(list->data.artist, ",") == NULL) {
-
-		//testing
-		//print to file
-		fprintf(outfile, "%s,%s,%s,%s,%d:%d,%d,%d", list->data.artist, list->data.albumTitle, list->data.songTitle, list->data.genre,
-			list->data.songLength.minutes, list->data.songLength.seconds, list->data.numberOfPlays, list->data.rating);
 	}
-	else {
-		//first and last name
-
-		//make a copy of the artist's name but add a comma a the end
-		//this will make tokenization easier
-		strcpy(artistFullName, list->data.artist);
-		strcat(artistFullName, ",");
-
-		//use strtok to seperate the first and last names
-		artistLastName = strtok(artistFullName, ",");
-		artistFirstName = strtok(NULL, ",");
-
-		//print to file
-		fprintf(outfile, "\"%s,%s\",%s,%s,%s,%d:%d,%d,%d", artistLastName, artistFirstName, list->data.albumTitle, list->data.songTitle, list->data.genre,
-			list->data.songLength.minutes, list->data.songLength.seconds, list->data.numberOfPlays, list->data.rating);
-
-	}
-	//********************************************************************
-
 
 }
 
@@ -346,7 +322,7 @@ void displaySongsByArtist(Node *list, char* artistName) {
 	printf("Songs by %s: \n\n", artistName);
 
 	//Loop through the linked list and print the details of each record
-	while (list->next != NULL) {
+	while (list != NULL) {
 
 		//comparing the name name of the artist in the data set to the passed in string of the artist
 		if (strcmp(list->data.artist, artistName) == 0) {
@@ -361,17 +337,6 @@ void displaySongsByArtist(Node *list, char* artistName) {
 
 		//move to the next item in the list
 		list = list->next;
-	}
-
-	//The first song in the list check
-	//comparing the name name of the artist in the data set to the passed in string of the artist
-	if (strcmp(list->data.artist, artistName) == 0) {
-
-		printf("Artist: %s\nSong Title: %s\nAlbum Title: %s\nDuration: %d:%d\nGenre: %s\nNumber of Plays: %d\nRating: %d\n\n",
-			list->data.artist, list->data.songTitle, list->data.albumTitle, list->data.songLength.minutes, list->data.songLength.seconds,
-			list->data.genre, list->data.numberOfPlays, list->data.rating);
-
-		count += 1;
 	}
 
 	if (count == 0) {
@@ -400,7 +365,7 @@ void editSongByArtist(Node **list, char* artistName) {
 	headPtr = *list;
 
 	//Loop through the linked list and print the details of each record
-	while ((*list)->next != NULL || option != 1) {
+	while ((*list) != NULL || option != 1) {
 
 		//comparing the name name of the artist in the data set to the passed in string of the artist
 		if (strcmp((*list)->data.artist, artistName) == 0) {
@@ -534,13 +499,14 @@ void editSongByArtist(Node **list, char* artistName) {
 	}
 
 
-	//Display message that no chnages were made
+	//Display message that no songs matched the search criteria
 	if (count == 0) {
 
 		printf("\nThere were no songs that matched the search criteria\n");
 
 	}
 
+	//Display message that no changes were made
 	if (changeMade == false) {
 
 		printf("\nThere were no changes made to any song records\n");
@@ -571,7 +537,7 @@ void editRatingByArtist(Node **list, char* artistName) {
 	headPtr = *list;
 
 	//Loop through the linked list and print the details of each record
-	while ((*list)->next != NULL || option != 1) {
+	while ((*list) != NULL || option != 1) {
 
 		//comparing the name name of the artist in the data set to the passed in string of the artist
 		if (strcmp((*list)->data.artist, artistName) == 0) {
@@ -642,13 +608,14 @@ void editRatingByArtist(Node **list, char* artistName) {
 	}
 
 
-	//Display message that no chnages were made
+	//Display message that there were no songs that matched the search criteria
 	if (count == 0) {
 
 		printf("\nThere were no songs that matched the search criteria\n");
 
 	}
 
+	//Display message that no changes were made
 	if (changeMade == false) {
 
 		printf("\nThere were no changes made to any song records\n");
@@ -663,7 +630,7 @@ void editRatingByArtist(Node **list, char* artistName) {
 
 void playLibrary(Node *list) {
 
-	while (list->next != NULL) {
+	while (list != NULL) {
 		printf("Now Playing:\n\n");
 
 		printf("Artist: %s\nSong Title: %s\nAlbum Title: %s\nDuration: %d:%d\nGenre: %s\nNumber of Plays: %d\nRating: %d\n\n",
@@ -681,16 +648,6 @@ void playLibrary(Node *list) {
 
 		system("cls");
 	}
-
-	printf("Now Playing:\n\nArtist: %s\nSong Title: %s\nAlbum Title: %s\nDuration: %d:%d\nGenre: %s\nNumber of Plays: %d\nRating: %d\n\n",
-		list->data.artist, list->data.songTitle, list->data.albumTitle, list->data.songLength.minutes, list->data.songLength.seconds,
-		list->data.genre, list->data.numberOfPlays, list->data.rating);
-
-	//increment the number of plays by 1
-	list->data.numberOfPlays += 1;
-
-	//display the last song for 3 seconds
-	Sleep(3000);
 
 	system("cls");
 }
